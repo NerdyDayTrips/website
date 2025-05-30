@@ -3,7 +3,7 @@ slug: 'daytrip/as/jp/kyoto-railway-museum-'
 date: '2025-05-30T16:11:21.201Z'
 poster: 'Shiawase'
 lat: '34.987473'
-lng: '135.257436'
+lng: '135.742693'
 location: 'Kankijicho, Shimogyo-ku, Kyoto'
 title: 'Kyoto Railway Museum '
 external_url: https://www.kyotorailwaymuseum.jp/en/
