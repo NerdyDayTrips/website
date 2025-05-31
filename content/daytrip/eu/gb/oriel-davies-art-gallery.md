@@ -5,6 +5,7 @@ lat: '52.514742'
 lng: '-3.317405'
 location: Oriel Davies Gallery, Back Lane, Penygloddfa, Newtown and Llanllwchaiarn,
   Newtown, Powys, Cymru / Wales, SY16 2QZ, United Kingdom
+external_url: https://orieldavies.org
 title: Oriel Davies Art Gallery
 ---
 
