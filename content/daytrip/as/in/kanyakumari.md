@@ -6,7 +6,7 @@ poster: sppfrom1998
 date: '2012-08-22T11:27:00'
 lat: '8.053597134203983'
 lng: '77.4049315625'
-external_url: null
+external_url: https://en.wikipedia.org/wiki/Kanyakumari
 ---
 
 The southern most spot of mainland India :
