@@ -1,3 +1,6 @@
+<h1>Search Locations</h1>
+<p>Use the box to search, move and zoom the map to sort results by distance.</p>
+<div id="map-container" style="height: 300px; width: 100%; margin-bottom: 20px;"></div>
 <form id="search">
     <input type="search" name="q" required>
     <input type="submit" value="Search">
@@ -7,12 +10,17 @@
 <template id="sres">
     <li><a href="#"></a> (<i></i>)</li>
 </template>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+    crossorigin=""></script>
 <script src="https://unpkg.com/lunr/lunr.js"></script>
 <script>
+let markersLayer; // To store and manage result markers
+
 let builtIndex = false;
 let idx;
 const snippet = document.getElementById("sres").content;
-const locsByPermalink = {};
+const locsByPermalink = {}; // Will store {name, lat, lng}
 const COUNTRIES = {
   "ax": "Åland Islands",
   "al": "Albania",
@@ -262,48 +270,196 @@ const COUNTRIES = {
   "ye": "Yemen",
   "zm": "Zambia",
   "zw": "Zimbabwe"
+};
+
+let leafletMap;
+let lastQueryResults = []; // To store raw Lunr search results
+
+function haversineDistance(lat1, lon1, lat2, lon2) {
+    const R = 6371; // Radius of the Earth in km
+    const dLat = (lat2 - lat1) * Math.PI / 180;
+    const dLon = (lon2 - lon1) * Math.PI / 180;
+    const a =
+        Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+        Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+        Math.sin(dLon / 2) * Math.sin(dLon / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    const distance = R * c;
+    return distance; // in km
+}
+
+function renderResults(lunrRes) {
+    const ul = document.getElementById("results");
+    ul.innerHTML = "";
+
+    if (!lunrRes || lunrRes.length === 0) {
+        ul.innerHTML = "<li>No results found.</li>";
+        // Clear any existing markers
+        markersLayer.clearLayers();
+        return;
+    }
+
+    const mapCenter = leafletMap ? leafletMap.getCenter() : null;
+
+    const processedResults = lunrRes.map(r => {
+        const locData = locsByPermalink[r.ref];
+        if (!locData) return null;
+
+        let distance = null;
+        if (mapCenter && locData.lat !== undefined && locData.lng !== undefined) {
+            const lat = parseFloat(locData.lat);
+            const lng = parseFloat(locData.lng);
+            if (!isNaN(lat) && !isNaN(lng)) {
+                 distance = haversineDistance(mapCenter.lat, mapCenter.lng, lat, lng);
+            }
+        }
+        const permalinkParts = r.ref.split("/");
+        const countryCode = permalinkParts[permalinkParts.length - 2];
+
+    return {
+    ...r,
+    name: locData.name,
+    permalink: r.ref,
+    country_code: countryCode,
+    distance: distance,
+    lat: parseFloat(locData.lat), 
+    lng: parseFloat(locData.lng)  
+};
+    }).filter(r => r !== null);
+
+    if (mapCenter) {
+        processedResults.sort((a, b) => {
+            const distA = (a.distance === null || isNaN(a.distance)) ? Infinity : a.distance;
+            const distB = (b.distance === null || isNaN(b.distance)) ? Infinity : b.distance;
+            return distA - distB;
+        });
+    }
+    
+    if (processedResults.length === 0 && lunrRes.length > 0) {
+         ul.innerHTML = "<li>No results with valid location data.</li>"; 
+         markersLayer.clearLayers();
+    }
+    // Clear existing markers and add new ones
+    markersLayer.clearLayers();
+    
+    // Add markers for search results
+    const bounds = L.latLngBounds();
+
+    for (const r of processedResults) {
+        // Add to list
+        const s = snippet.cloneNode(true);
+        const a = s.querySelector("a");
+        a.href = "../" + r.permalink;
+        a.textContent = r.name;
+
+        const i = s.querySelector("i");
+        i.textContent = COUNTRIES[r.country_code] || r.country_code;
+        
+        const distSpan = s.querySelector(".distance");
+        if (distSpan && r.distance !== null && !isNaN(r.distance)) {
+            distSpan.textContent = ` (${r.distance.toFixed(1)} km)`;
+        } else if (distSpan) {
+            distSpan.textContent = ""; 
+        }
+        ul.append(s);
+        
+        // Add marker to map
+        if (!isNaN(r.lat) && !isNaN(r.lng)) {
+            const marker = L.marker([r.lat, r.lng])
+                .bindPopup(`<a href="../${r.permalink}">${r.name}</a>`)
+                .addTo(markersLayer);
+                
+            // Extend bounds to include this marker
+            bounds.extend([r.lat, r.lng]);
+        }
+    }
+    
+    // If we have results with locations, fit the map to show all markers
+    if (markersLayer.getLayers().length > 0) {
+        // Only fit bounds on initial search, not when the map is manually moved
+        if (!mapCenter || processedResults.length === 1) {
+            leafletMap.fitBounds(bounds, {
+                padding: [50, 50],
+                maxZoom: 13
+            });
+        }
+    }
 }
 
 function searchFor(q) {
     if (!builtIndex) {
-        setTimeout(searchFor, 1000, q);
+        setTimeout(searchFor, 100, q); // Retry shortly
         return;
     }
-
-
-    const res = idx.search(q);
-    const ul = document.getElementById("results");
-    ul.innerHTML = "";
-    for (const r of res) {
-        const s = snippet.cloneNode(true);
-        const permalink = r.ref;
-        const span = document.createElement("span");
-        span.innerHTML = locsByPermalink[permalink];
-        const a = s.querySelector("a");
-        a.href = "../" + permalink;
-        a.textContent = span.textContent;
-        const i = s.querySelector("i");
-        const parts = permalink.split("/");
-        const country_code = parts[parts.length-2];
-        i.textContent = COUNTRIES[country_code] || country_code;
-        ul.append(s);
-    }
+    lastQueryResults = idx.search(q);
+    renderResults(lastQueryResults);
 }
 
-fetch("../daytrip/index.json").then(res => res.json()).then(data => {
-    idx = lunr(function() {
-        this.ref("permalink");
-        this.field("name");
-        for (const loc of data.data) {
-            this.add(loc);
-            locsByPermalink[loc.permalink] = loc.name;
+document.addEventListener('DOMContentLoaded', () => {
+    leafletMap = L.map('map-container').setView([20, 0], 2); // Default: wide view, centered roughly
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 18,
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(leafletMap);
+    
+    // Initialize a layer group for markers
+    markersLayer = L.layerGroup().addTo(leafletMap);
+
+    leafletMap.on('moveend', () => {
+        if (lastQueryResults && lastQueryResults.length > 0) {
+            renderResults(lastQueryResults); // Re-sort and re-display with new map center
         }
-        builtIndex = true;
     });
-})
+
+    // Initial search if query parameter "q" is in URL
+    // This is now handled after the index is built (see fetch below)
+});
+
+fetch("../daytrip/index.json")
+    .then(res => res.json())
+    .then(data => {
+        idx = lunr(function() {
+            this.ref("permalink");
+            this.field("name");
+            for (const loc of data.data) {
+                this.add(loc); // Lunr will use 'permalink' and 'name'
+                locsByPermalink[loc.permalink] = { 
+                    name: loc.name, 
+                    lat: loc.lat, 
+                    lng: loc.lng  
+                };
+            }
+            builtIndex = true;
+            
+            // Check for initial query from URL after index is built
+            const urlParams = new URLSearchParams(window.location.search);
+            const initialQuery = urlParams.get('q');
+            if (initialQuery) {
+                const searchInput = document.querySelector('#search input[name="q"]');
+                if (searchInput) {
+                    searchInput.value = initialQuery;
+                }
+                searchFor(initialQuery);
+            }
+        });
+    })
+    .catch(error => {
+        console.error("Error fetching or processing index.json:", error);
+        const ul = document.getElementById("results");
+        if (ul) {
+            ul.innerHTML = "<li>Error loading search data. Please try again later.</li>";
+        }
+    });
+
 document.getElementById("search").onsubmit = e => {
     e.preventDefault();
     const fd = new FormData(e.target);
-    searchFor(fd.get("q"));
-}
+    const query = fd.get("q");
+    searchFor(query);
+    // Update URL with query parameter for shareability/bookmarking
+    if (window.history.pushState) {
+        const newurl = window.location.protocol + "//" + window.location.host + window.location.pathname + '?q=' + encodeURIComponent(query);
+        window.history.pushState({path:newurl},'',newurl);
+    }
+};
 </script>
