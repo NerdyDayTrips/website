@@ -1,12 +1,12 @@
 ---
 slug: "daytrip/eu/de/senckenberg-naturmuseum"
 title: SENCKENBERG naturMUSEUM
-location: Frankfurt, Germany, 60325
+location: Senckenberg Naturmuseum Frankfurt, Senckenberganlage 25, 60325 Frankfurt, Germany
 poster: DarthVirago
 date: '2013-01-21T16:00:00'
-lat: '50.1157078'
-lng: '8.6591469'
-external_url: null
+lat: 50.117558
+lng: 8.651674
+external_url: https://museumfrankfurt.senckenberg.de/de/
 ---
 
 The Senckenberg Museum is one of the largest Natural History Museums in Germany and exhibits the recent biodiversity of life and evolution of organisms as well as the change of planet earth over millions of years. New scientific findings in all areas of biology, paleontology and geology are on display.
