@@ -3,6 +3,8 @@
     "permalink" : "{{ .Slug }}",
     "lat": "{{ .Params.lat }}",
     "lng": "{{ .Params.lng }}"{{ if .Params.poster }},
-    "poster": "{{ .Params.poster }}"
+    "poster": "{{ .Params.poster }}"{{ end }}{{ if .Params.location}},
+    "location": "{{ .Params.location }}"{{ end }}{{ if .Params.external_url}},
+    "external_url": "{{ .Params.external_url }}"
     {{ end }}
 }

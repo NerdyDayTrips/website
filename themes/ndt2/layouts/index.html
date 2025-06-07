@@ -1,17 +1,6 @@
 {{ define "main" }}
 {{ .Content }}
 
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" 
-  integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" 
-  crossorigin="" />
-
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" 
-  integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" 
-  crossorigin=""></script>
-<link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.css" />
-<link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.Default.css" />
-<script src="https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster-src.js"></script>
-
 <div class="map-container">
   <div id="map">
     <button id="locate-btn" class="locate-btn" title="Find my location">📍</button>
@@ -59,12 +48,6 @@
 .locate-btn:hover, .locate-btn:focus {
   background: #f0f0f0;
 }
-.map-container { position: relative; }
-/* Make Leaflet popup text larger for user location */
-.leaflet-popup-content {
-  font-size: 4em;
-  font-weight: bold;
-}
 </style>
 
 <script>
@@ -80,7 +63,21 @@ async function loadMarkers(L, map) {
             }
 
             venues.data.forEach(v => {
-                const marker = L.marker({lon: v.lng, lat: v.lat}).bindPopup(`<a href="${v.permalink}">${v.name}</a>`);
+                var popupText = `<a href="${v.permalink}">${v.name}</a>`;
+                // If the venue has an external_url add it as a ink to the popup
+                if (v.external_url) {
+                    popupText += `&nbsp;&nbsp;<a href="${v.external_url}" target="_blank" class="external-link" title="Website"><i class="fa-solid fa-arrow-up-right-from-square"></i></a>`;
+                }
+                // If the venue has a location, append it to the popup text
+                if (v.location) {
+                    popupText += `<br><div class="popup-location">${v.location}</div>`;
+                }
+                // If the venue has a poster, add it to the popup
+                if (v.poster) {
+                    popupText += `<br><div class="popup-poster">Added by: ${v.poster}.</div>`;
+                }
+                const marker = L.marker({lon: v.lng, lat: v.lat}).bindPopup(popupText);
+
                 marker.addTo(cluster);
                 allMarkers.push(marker); // Store marker reference
                 
