@@ -462,23 +462,42 @@ html, body {
   border-bottom: 1px solid #4f5b66; /* Lighter border for dark sidebar */
 }
 
-/* Ensure links in posts list are styled for dark background */
-#posts li a {
-  color: #9adbbe; /* A contrasting light color for links */
+/* Ensure links in side bar are coloured nicely */
+.sidebar-content #posts li.post-item .post-title a {
+  color: #7cc5f1; 
 }
-#posts li a:hover {
-  color: #ecf0f1;
-}
-
-.leaflet-popup-content { 
-  color: #222; /* Keep popup text dark as popup background is usually light */
-  width: 200px;
-  height: 50px;
+.sidebar-content #posts li.post-item .post-title a:hover {
+  color: #02b1ec;
 }
 
-.leaflet-popup-content a { 
-  font-size: 14px; 
-  font-weight: bold;;
+.map-container { position: relative; }
+
+#map .leaflet-popup-content { 
+  color: #222; 
+  width: 400px;
+  height: 200px;
+  line-height: 1.4;
+  font-weight: normal;
+  font-size: 1em; 
+}
+
+#map .leaflet-popup-content a { 
+  font-size: 2.5em; 
+  font-weight: bold;
+  color: #02b1ec;
+}
+
+#map .leaflet-popup-content .popup-location { 
+  font-size: 2em; 
+  font-weight: normal;
+  color: #000000;
+}
+
+#map .leaflet-popup-content .popup-poster { 
+  font-size: 1.8em; 
+  font-weight: normal;
+  color: #000000;
+  font-style: italic;
 }
 
 /* Added from posts.html */
