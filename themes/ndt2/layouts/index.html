@@ -210,7 +210,7 @@ map.on('locationerror', function(e) {
 const clusterToggleBtn = document.getElementById('cluster-toggle-btn');
 let clusteringEnabled = true;
 
-clusterToggleBtn.addEventListener('click', function() {
+if (clusterToggleBtn) clusterToggleBtn.addEventListener('click', function() {
     if (clusteringEnabled) {
         // Disable clustering
         map.removeLayer(cluster);
