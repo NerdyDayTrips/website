@@ -24,6 +24,7 @@ relativeURLs = true
 
 [params]
     mainSections = ["daytrip", "post"]
+    logo = "colour-logo.svg"
     description = "A global map of places to visit that might appeal to nerdy types"
 
 [params.repository]
