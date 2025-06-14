@@ -51,6 +51,32 @@
 </style>
 
 <script>
+const SHORTENERS = [
+    address => address.replace(/, England,/g, ""),
+    address => address.replace(/, Wales,/g, ""),
+    address => address.replace(/, Alba \/ Scotland,/g, ""),
+    address => address.replace(/, United States of America$/, ", USA"),
+];
+function shorten(address, target_length) {
+    // successively try different address shortening techniques
+    // to try to get the address down below target_length.
+    // Add shorteners to this list in order of aggressiveness.
+    // If we've tried all shorteners and it's still too long, 
+    // tough, return anyway.
+    console.log("shorten", address, address.length);
+
+    // if it's already short enough, don't do anything.
+    if (address.length <= target_length) return address;
+
+    SHORTENERS.forEach(shortener => {
+        address = shortener(address);
+        console.log("  tried a shortener", address, address.length);
+        if (address.length <= target_length) return address;
+    })
+    // didn't work, still too long, oh well
+    return address;
+}
+
 var allMarkers = [];
 async function loadMarkers(L, map) {
     fetch("./daytrip/index.json")
@@ -63,25 +89,38 @@ async function loadMarkers(L, map) {
             }
 
             venues.data.forEach(v => {
-                var popupText = `<a href="${v.permalink}">${v.name}</a>`;
-                // If the venue has an external_url add it as a ink to the popup
-                if (v.external_url) {
-                    popupText += `&nbsp;&nbsp;<a href="${v.external_url}" target="_blank" class="external-link" title="Website"><i class="fa-solid fa-arrow-up-right-from-square"></i></a>`;
-                }
-                // If the venue has a location, append it to the popup text
-                if (v.location) {
-                    popupText += `<br><div class="popup-location">${v.location}</div>`;
-                }
-                // If the venue has a poster, add it to the popup
-                if (v.poster) {
-                    popupText += `<br><div class="popup-poster">Added by: ${v.poster}.</div>`;
-                }
+                const popupText = "loading...";
                 const marker = L.marker({lon: v.lng, lat: v.lat}).bindPopup(popupText);
+                marker.on("click", e => {
+                    /* populate the contents of the popup when you click it
+                       this keeps the size of the index.json down to a minimum */
+                    const popup = e.target.getPopup();
+                    fetch(v.permalink + '/index.json').then(res => res.json()).then(details => {
+                        let popupText = `<a class="popup-name" href="${details.permalink}">${details.name}</a>`;
+                        // If the venue has an external_url add it as a ink to the popup
+                        if (details.external_url) {
+                            popupText += `&nbsp;&nbsp;<a href="${details.external_url}" target="_blank" class="external-link" title="Website"><i class="fa-solid fa-arrow-up-right-from-square"></i></a>`;
+                        }
+                        // If the venue has a location, append it to the popup text
+                        if (details.location) {
+                            popupText += `<div class="popup-location">${shorten(details.location, 100)}</div>`;
+                        }
+                        // If the venue has a description, append it to the popup text
+                        if (details.description) {
+                            popupText += `<div class="popup-description">${details.description}</div>`;
+                        }
+                        // If the venue has a poster, add it to the popup
+                        if (details.poster) {
+                            popupText += `<div class="popup-poster">Added by: ${details.poster}.</div>`;
+                        }
+                        popup.setContent(popupText);
+                        popup.update();
+                    })
+                })
 
                 marker.addTo(cluster);
                 allMarkers.push(marker); // Store marker reference
                 
-                console.log({jumpToSlug, p: v.permalink, eq: jumpToSlug == v.permalink})
                 if (jumpToSlug && jumpToSlug == v.permalink) {
                     console.log("Fly, my pretties")
                     map.flyTo([v.lat, v.lng], 19);

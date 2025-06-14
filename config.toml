@@ -14,7 +14,7 @@ relativeURLs = true
 [outputs]
     section = ['html', 'rss', 'json']
     home = ['html', 'rss']
-    page = ['html']
+    page = ['html', 'json']
     rss = ['rss']
     taxonomy = ['html', 'rss']
     term = ['html', 'rss']
