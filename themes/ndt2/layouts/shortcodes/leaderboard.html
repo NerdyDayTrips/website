@@ -1,0 +1,36 @@
+{{ $taxonomyObject := .Site.Taxonomies.poster }}
+{{ $ageRecent := -2 }}
+{{ $startRecent := time.AsTime ( now.AddDate 0 0 $ageRecent) }}
+{{ $recent := where .Site.Taxonomies.poster "Date" "gt" $startRecent }}
+
+
+<h2>Last {{ $ageRecent}} days leaderboard (filtering by time)</h2>
+<ol>
+{{ range $recent.ByCount }}
+  <li><a href="{{ .Page.RelPermalink }}">{{ .Page.LinkTitle }}</a> ({{ .Count }})</li>
+{{ end }}
+</ol>
+
+<h2>All-time leaderboard: Stuart (filtering by name)</h2>
+<ol>
+{{ range (where ($taxonomyObject.ByCount ) "Name" "stuart langridge") }}
+  <li><a href="{{ .Page.RelPermalink }}">{{ .Page.LinkTitle }}</a> ({{ .Count }})</li>
+{{ end }}
+</ol>
+
+<h2>All-time leaderboard: top 10 (showing only some)</h2>
+<ol>
+{{ range (first 10 ($taxonomyObject.ByCount )) }}
+  <li><a href="{{ .Page.RelPermalink }}">{{ .Page.LinkTitle }}</a> ({{ .Count }})</li>
+{{ end }}
+</ol>
+
+<h2>All-time leaderboard: everybody (show the lot)</h2>
+<ol>
+{{ range $taxonomyObject.ByCount }}
+  <li><a href="{{ .Page.RelPermalink }}">{{ .Page.LinkTitle }}</a> ({{ .Count }})</li>
+{{ end }}
+</ol>
+
+<h2>Leaderboard actual data for reference</h2>
+<pre>{{ debug.Dump $taxonomyObject.ByCount }}</pre>
