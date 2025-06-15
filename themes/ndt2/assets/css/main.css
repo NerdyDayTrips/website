@@ -35,6 +35,13 @@ header#banner {
     position: relative; /* Establish positioning context */
 }
 
+.logo {
+  display: flex;
+  flex-direction: row;
+  gap: 2rem;
+  align-items: center;
+}
+
 header#banner a {
     color: #ecf0f1; /* Ensure h1 link color matches banner text color */
     text-decoration: none;

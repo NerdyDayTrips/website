@@ -1,5 +1,19 @@
 <header id="banner">
-    <h1><a href="{{ .Site.Home.RelPermalink }}">{{ .Site.Title }}</a></h1>
+    {{ $logo := .Site.Params.logo }}
+    {{ if $logo }}
+    <div class="logo">
+        <a href="{{ .Site.Home.RelPermalink }}">
+            <img src="{{ .Site.Home.RelPermalink }}images/{{ $logo }}" alt="{{ .Site.Title }}">
+        </a>
+        <h1 class="site-title visuallyhidden">
+            <a href="{{ .Site.Home.RelPermalink }}">{{ .Site.Title }}</a>
+        </h1>
+    </div>
+    {{ else }}
+    <h1 class="site-title">
+        <a href="{{ .Site.Home.RelPermalink }}">{{ .Site.Title }}</a>
+    </h1>
+    {{ end }}
     <nav>
         <ul>
             {{ range .Site.Menus.main.ByWeight -}}
