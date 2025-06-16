@@ -70,12 +70,14 @@ async function loadMarkers(L, map) {
                     const domain = new URL(v.external_url).hostname;
                     popupText += `
                       <br>
+                      <a href="${v.external_url}" target="_blank" rel="noopener noreferrer">
                       <img
                          src="https://logo.clearbit.com/${domain}"
                          alt="Site logo"
                          style="margin-top:8px; max-width:100%; border-radius:4px;"
                          onerror="this.style.display='none';"
                        />
+                      </a>
                       `;
                 }
                 // If the venue has a location, append it to the popup text
