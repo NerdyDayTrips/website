@@ -67,6 +67,16 @@ async function loadMarkers(L, map) {
                 // If the venue has an external_url add it as a ink to the popup
                 if (v.external_url) {
                     popupText += `&nbsp;&nbsp;<a href="${v.external_url}" target="_blank" class="external-link" title="Website"><i class="fa-solid fa-arrow-up-right-from-square"></i></a>`;
+                    const domain = new URL(v.external_url).hostname;
+                    popupText += `
+                      <br>
+                      <img
+                         src="https://logo.clearbit.com/${domain}"
+                         alt="Site logo"
+                         style="margin-top:8px; max-width:100%; border-radius:4px;"
+                         onerror="this.style.display='none';"
+                       />
+                      `;
                 }
                 // If the venue has a location, append it to the popup text
                 if (v.location) {

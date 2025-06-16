@@ -475,7 +475,6 @@ html, body {
 #map .leaflet-popup-content { 
   color: #222; 
   width: 400px;
-  height: 200px;
   line-height: 1.4;
   font-weight: normal;
   font-size: 1em; 
