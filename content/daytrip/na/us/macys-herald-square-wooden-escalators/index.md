@@ -8,4 +8,5 @@ location: Macy's, 151, West 34th Street, Garment District, Manhattan Community B
 title: Macy's Herald Square- wooden escalators
 ---
 
-
+There are also some wooden elevators, such as the express to the Stella 34 restaurant.
+![A converted wooden Gurney Elevator. Image made available under CC0](image.png)
