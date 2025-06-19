@@ -1,0 +1,10 @@
+{
+    "description": {{ .Content | plainify | jsonify }},
+    "permalink" : {{ .Slug | plainify | jsonify }},
+    "name": {{ .Name | plainify | jsonify }},
+    "lat": "{{ .Params.lat }}",
+    "lng": "{{ .Params.lng }}"{{ if .Params.poster }},
+    "poster": {{ .Params.poster | plainify | jsonify }}{{ end }}{{ if .Params.location}},
+    "location": {{ .Params.location | plainify | jsonify }}{{ end }}{{ if .Params.external_url}},
+    "external_url": {{ .Params.external_url | plainify | jsonify }}{{ end }}
+}
