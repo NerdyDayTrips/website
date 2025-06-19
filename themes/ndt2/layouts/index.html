@@ -67,6 +67,18 @@ async function loadMarkers(L, map) {
                 // If the venue has an external_url add it as a ink to the popup
                 if (v.external_url) {
                     popupText += `&nbsp;&nbsp;<a href="${v.external_url}" target="_blank" class="external-link" title="Website"><i class="fa-solid fa-arrow-up-right-from-square"></i></a>`;
+                    const domain = new URL(v.external_url).hostname;
+                    popupText += `
+                      <br>
+                      <a href="${v.external_url}" target="_blank" rel="noopener noreferrer">
+                      <img
+                         src="https://img.logo.dev/${domain}?token=pk_SBlY0W47S9Ww5wmX2PejKA"
+                         alt="Site logo"
+                         style="margin-top:8px; max-width:100%; border-radius:4px;"
+                         onerror="this.style.display='none';"
+                       />
+                      </a>
+                      `;
                 }
                 // If the venue has a location, append it to the popup text
                 if (v.location) {
