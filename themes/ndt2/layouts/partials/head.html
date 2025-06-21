@@ -39,6 +39,7 @@
     {{ printf `<link rel="stylesheet" href="%s">` $css.RelPermalink | safeHTML }}
 
     <title>{{ .Title }}</title>
+    {{ partial "opengraph.html" . }}
     <link rel="me" href="https://mastodon.social/@nerdydaytrips">
     <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />

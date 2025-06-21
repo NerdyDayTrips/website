@@ -1,4 +1,5 @@
-baseURL = 'https://nerdydaytrips.org/'
+#baseURL = 'https://nerdydaytrips.org/'
+baseURL = 'https://add-opengraph-support.website-b3u.pages.dev/'
 languageCode = 'en-gb'
 title = 'Nerdy Day Trips²'
 theme = "ndt2"

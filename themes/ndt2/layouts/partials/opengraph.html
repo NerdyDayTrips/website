@@ -1,0 +1,84 @@
+{{/* Adapted from https://raw.githubusercontent.com/aarol/hugo-theme-groovy/refs/heads/master/layouts/partials/opengraph.html */}}
+{{/*  This partial can be overruled by creating site/layouts/partials/opengraph.html  */}}
+<meta property="og:title" content="{{ .Title }}" />
+<meta property="og:description" content="{{ with .Description }}{{ . }}{{ else }}{{if .IsPage}}{{ .Summary }}{{ else }}{{ with .Site.Params.description }}{{ . }}{{ end }}{{ end }}{{ end }}" />
+<meta property="og:type" content="{{ if .IsPage }}article{{ else }}website{{ end }}" />
+<meta property="og:url" content="{{ .Permalink }}" />
+
+{{- if .IsPage }}
+{{- $iso8601 := "2006-01-02T15:04:05-07:00" -}}
+<meta property="article:section" content="{{ .Section }}" />
+{{ with .PublishDate }}<meta property="article:published_time" {{ .Format $iso8601 | printf "content=%q" | safeHTMLAttr }} />{{ end }}
+{{ with .Lastmod }}<meta property="article:modified_time" {{ .Format $iso8601 | printf "content=%q" | safeHTMLAttr }} />{{ end }}
+{{- end -}}
+
+{{- with .Params.audio }}<meta property="og:audio" content="{{ . }}" />{{ end }}
+{{- with .Params.locale }}<meta property="og:locale" content="{{ . }}" />{{ end }}
+{{- with .Site.Params.title }}<meta property="og:site_name" content="{{ . }}" />{{ end }}
+{{- with .Params.videos }}{{- range . }}
+<meta property="og:video" content="{{ . | absURL }}" />
+{{ end }}{{ end }}
+
+{{/* Generate opengraph image */}}
+{{- if .IsPage -}}
+  {{ $base := resources.Get "images/og_base.png" }}
+  {{ if not $base }}
+    {{ warnf "OG base image not found!" }}
+  {{ else }}
+    {{ $logo := resources.Get "images/og_logo.png" }}
+    {{ $boldFont := resources.Get "fonts/Ubuntu-B.ttf"}}
+    {{ $mediumFont := resources.Get "fonts/Ubuntu-R.ttf"}}
+    {{ $img := $base }}
+      {{/* Always add the logo */}}
+      {{ $img = $img.Filter (images.Overlay $logo 1062 472) }}
+      {{/* Add text overlays */}}
+      {{ $img = $img.Filter (images.Text .Site.Title (dict
+        "color" "#202020"
+        "size" 72
+        "linespacing" 2
+        "x" 470
+        "y" 492
+        "font" $boldFont
+      ))}}
+      {{ $img = $img.Filter (images.Text .Site.Title (dict
+        "color" "#e0e0e0"
+        "size" 72
+        "linespacing" 2
+        "x" 468
+        "y" 490
+        "font" $boldFont
+      ))}}
+      {{ $img = $img.Filter (images.Text .Page.Title (dict
+        "color" "#202020"
+        "size" 122
+        "linespacing" 2
+        "x" 52
+        "y" 52
+        "font" $boldFont
+      ))}}
+      {{ $img = $img.Filter (images.Text .Page.Title (dict
+        "color" "#e0e0e0"
+        "size" 122
+        "linespacing" 2
+        "x" 50
+        "y" 50
+        "font" $boldFont
+      ))}}
+
+
+      <!-- Not strictly necessary because the base image is 1200x630 -->
+      {{ $img = $img.Resize "1200x" }}
+      
+      {{ $imageName := printf "og-%s" (md5 .RelPermalink) }}
+
+      {{ $processedImg := $img.Process (printf "png %s" $imageName) }}
+      {{ warnf "Processed image: %s" $processedImg.Permalink }}
+      <meta property="og:image" content="{{ $processedImg.Permalink }}" />
+      <meta property="og:image:width" content="{{ $processedImg.Width }}" />
+      <meta property="og:image:height" content="{{ $processedImg.Height }}" />
+      
+      <meta name="twitter:card" content="summary_large_image" />
+      <meta name="twitter:title" content="{{ .Title }}" />
+      <meta name="twitter:description" content="{{ with .Description }}{{ . }}{{ else }}{{if .IsPage}}{{ .Summary }}{{ else }}{{ with .Site.Params.description }}{{ . }}{{ end }}{{ end }}{{ end -}}"/>
+      <meta name="twitter:image" content="{{ $processedImg.Permalink }}" />    {{ end }}
+  {{ end }}
