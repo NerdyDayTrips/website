@@ -2,9 +2,9 @@
 slug: "daytrip/na/us/queen-califias-magic-circle"
 date: '2001-01-30T04:37:00'
 poster: "Bill Sanders"
-lat: '33.077372383433236'
-lng: '-117.06165931884766'
-location:  3333 Bear Valley Parkway Escondido, California, United States
+lat: 33.080162
+lng: -117.062867
+location:  3333 Bear Valley Parkway, Escondido, California 92025, United States
 title: Queen Califia's Magic Circle
 external_url: https://www.escondido.gov/facilities/facility/details/nikidesaintphallesqueencalifiasmagicalcircle-19
 ---
