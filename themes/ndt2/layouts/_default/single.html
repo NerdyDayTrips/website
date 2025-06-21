@@ -2,8 +2,7 @@
 <article>
     <header id="post-header">
         <h1>{{ if .Params.lat }}
-                    &nbsp;
-                    <a href="/#{{ .Params.slug }}" title="Show {{ .Title }} on the map"><i class="fa-solid fa-map-location-dot"></i></a>{{ end }}&nbsp;{{ .Title }}
+                    <a href="/#{{ .Params.slug }}" title="Show {{ .Title }} on the map"><i class="fa-solid fa-map-location-dot"></i></a> &nbsp; {{ end }}{{ .Title }}
             {{ if .Params.external_url }}
                 &nbsp;
                 <a href="{{ .Params.external_url }}" target="_blank" class="external-link" title="Website"><i class="fa-solid fa-arrow-up-right-from-square"></i></a>
@@ -85,12 +84,14 @@
     {{- end }}
     {{- .Content -}}
 </article>
-<hr>
+<hr><center>
 {{ if .Params.lat }}
-    <a href="https://www.google.com/maps?ll={{ .Params.lat }},{{ .Params.lng }}&q={{ .Params.lat }},{{ .Params.lng }}&hl=en&t=m&z=15" target="_blank" class="external-link" title="Google Maps"><i class="fa-solid fa-map"></i> Open in Google Maps</a>
-    <br>
-    <a href="https://www.openstreetmap.org/?mlat={{ .Params.lat }}&mlon={{ .Params.lng }}#map=19/{{ .Params.lat }}/{{ .Params.lng }}" target="_blank" class="external-link" title="OpenStreetMap"><i class="fa-solid fa-globe"></i> Open in OpenStreetMap</a>
-{{ end }}
-{{ partial "repository-link.html" (dict "action" "edit" "page" .) }}
+    <a href="https://www.google.com/maps?ll={{ .Params.lat }},{{ .Params.lng }}&q={{ .Params.lat }},{{ .Params.lng }}&hl=en&t=m&z=15" target="_blank" class="external-link" title="Google Maps"><i class="fa-solid fa-map"></i> Google&nbsp;Maps</a>&nbsp;
+    <a href="https://www.openstreetmap.org/?mlat={{ .Params.lat }}&mlon={{ .Params.lng }}#map=19/{{ .Params.lat }}/{{ .Params.lng }}" target="_blank" class="external-link" title="OpenStreetMap"><i class="fa-solid fa-globe"></i> OpenStreetMap</a>
+{{ end }}&nbsp;
+{{ partial "repository-link.html" (dict "action" "edit" "page" .) }}&nbsp;
 {{ partial "repository-link.html" (dict "action" "view" "page" .) }}
+</center><hr>
+{{ partial "giscus.html" . }}
+<hr>
 {{ end }}

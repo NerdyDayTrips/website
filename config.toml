@@ -33,7 +33,22 @@ relativeURLs = true
   service = 'GitHub'
   urlPatternEdit = 'https://github.com/%s/%s/edit/%s/%s'
   urlPatternView = 'https://github.com/%s/%s/blob/%s/%s'
-
+  
+[params.giscus]
+    repo = "nerdydaytrips/website"
+    repoID = "R_kgDOOu4FrA"
+    category = "Venues"
+    categoryID = "DIC_kwDOOu4FrM4Crptl"
+    mapping = "pathname"
+    strict = "0"
+    reactionsEnabled = "0"
+    emitMetadata = "0"
+    inputPosition = "bottom"
+    theme = "transparent_dark"
+    lang = "en"
+    loading = "lazy"
+    crossorigin = "anonymous"
+    
 [frontmatter]
   lastmod = ["lastmod", ":git", "date", "publishDate"]
 
