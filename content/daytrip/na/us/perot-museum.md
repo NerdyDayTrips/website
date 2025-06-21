@@ -3,8 +3,8 @@ slug: "daytrip/na/us/perot-museum"
 date: '2001-01-30T04:37:00'
 lat: '32.7774686'
 lng: '-96.8042882'
-location: South Lamar Street, West End Historic District, Downtown PID, Dallas, Dallas
-  County, Texas, 75215, United States
+location: 2201 N. Field Street, Dallas, TX 75201, United States
+external_url: https://www.perotmuseum.org
 title: Perot Museum
 ---
 
