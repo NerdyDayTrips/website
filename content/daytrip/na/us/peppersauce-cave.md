@@ -4,9 +4,9 @@ title: Peppersauce Cave
 location: Tucson, Pinal County, United States of America, 85623
 poster: kaye-oh
 date: '2012-02-03T16:04:00'
-lat: '32.552001'
-lng: '-110.720047'
-external_url: null
+lat: 32.52436
+lng: -110.70650
+external_url: https://en.wikipedia.org/wiki/Peppersauce_Cave
 ---
 
 This cave is for beginning spelunkers. It's up in the mountains, after a scenic drive, hidden just off to the right (there will be signs). A beautiful and exciting way to spend a couple hours of your day. Read the author's comments for instructions/suggestions.
