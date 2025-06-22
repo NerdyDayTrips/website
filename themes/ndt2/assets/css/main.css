@@ -479,6 +479,16 @@ html, body {
   line-height: 1.4;
   font-weight: normal;
   font-size: 1em; 
+  display: grid;
+  grid-template-areas: 
+    " title          external "
+    " address         address "
+    " description description "
+    " poster           poster ";
+  flex-direction: column;
+  justify-content: space-between;
+  grid-template-columns: 1fr min-content;
+  grid-template-rows: min-content min-content 1fr min-content;
 }
 
 #map .leaflet-popup-content a { 
@@ -486,18 +496,40 @@ html, body {
   font-weight: bold;
   color: #02b1ec;
 }
+#map .leaflet-popup-content a.popup-name {
+    grid-area: title;
+}
+#map .leaflet-popup-content a.external-link {
+    grid-area: external;
+}
 
 #map .leaflet-popup-content .popup-location { 
   font-size: 2em; 
   font-weight: normal;
   color: #000000;
+  grid-area: address;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
 }
+
+#map .leaflet-popup-content .popup-description { 
+  font-size: 1.8em; 
+  font-weight: normal;
+  color: #000000;
+  grid-area: description;
+  overflow: hidden;
+}
+
 
 #map .leaflet-popup-content .popup-poster { 
   font-size: 1.8em; 
   font-weight: normal;
   color: #000000;
   font-style: italic;
+  grid-area: poster;
 }
 
 /* Added from posts.html */
