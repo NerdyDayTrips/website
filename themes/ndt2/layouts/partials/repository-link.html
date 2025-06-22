@@ -6,15 +6,13 @@
     {{- $icon := "" }}
     {{- if eq $.action "edit" }}
       {{- $href = printf .urlPatternEdit .owner .repo .branch $path | urls.JoinPath }}
-      {{- $text = printf "Edit this page on %s" .service }}
+      {{- $text = printf "Edit on %s" .service }}
       {{- $icon = "fa-solid fa-pen-to-square" }}
     {{- else if eq $.action "view" }}
       {{- $href = printf .urlPatternView .owner .repo .branch $path | urls.JoinPath }}
-      {{- $text = printf "View this page on %s" .service }}
+      {{- $text = printf "View on %s" .service }}
       {{- $icon = "fa-solid fa-eye" }}
     {{- end }}
-    <div class="repository-link">
-      <a href="{{ $href }}" rel="external"><i class='{{ $icon }}'></i>&nbsp{{ $text }}</a>
-    </div>
+   <a href="{{ $href }}" rel="external"><i class='{{ $icon }}'></i>&nbsp{{ $text }}</a>
   {{- end }}
 {{- end -}}
