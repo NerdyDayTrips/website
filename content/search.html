@@ -382,7 +382,7 @@ function renderResults(lunrRes) {
         // Add to list
         const s = snippet.cloneNode(true);
         const a = s.querySelector("a");
-        a.href = "../" + r.permalink;
+        a.href = (r.permalink.startsWith("/") ? "" : "/") + r.permalink;
         
         // Create a temporary div to decode HTML entities safely
         const tempDiv = document.createElement('div');
