@@ -24,6 +24,8 @@
   {{ $img := resources.Get "images/og.png" }}
   {{ if not $img }}
     {{ warnf "OG base image not found!" }}
+  {{ else if getenv "HUGO_SKIP_OPENGRAPH" }}
+    {{ warnf "Skipping opengraph image gen because HUGO_SKIP_OPENGRAPH is set" }}
   {{ else }}
     {{ $boldFont := resources.Get "fonts/Ubuntu-B.ttf"}}
     {{ $mediumFont := resources.Get "fonts/Ubuntu-R.ttf"}}
