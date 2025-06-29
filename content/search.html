@@ -321,7 +321,7 @@ function haversineDistance(lat1, lon1, lat2, lon2) {
     return distance; // in km
 }
 
-function renderResults(lunrRes) {
+function renderResults(lunrRes, gotHereByDragging=false) {
     const ul = document.getElementById("results");
     ul.innerHTML = "";
 
@@ -332,43 +332,27 @@ function renderResults(lunrRes) {
         return;
     }
 
-    const mapCenter = leafletMap ? leafletMap.getCenter() : null;
+    let mapCenter = leafletMap ? leafletMap.getCenter() : null;
 
-    const processedResults = lunrRes.map(r => {
+    const processedResultsWithoutDistances = lunrRes.map(r => {
         const locData = locsByPermalink[r.ref];
         if (!locData) return null;
 
-        let distance = null;
-        if (mapCenter && locData.lat !== undefined && locData.lng !== undefined) {
-            const lat = parseFloat(locData.lat);
-            const lng = parseFloat(locData.lng);
-            if (!isNaN(lat) && !isNaN(lng)) {
-                 distance = haversineDistance(mapCenter.lat, mapCenter.lng, lat, lng);
-            }
-        }
         const permalinkParts = r.ref.split("/");
         const countryCode = permalinkParts[permalinkParts.length - 2];
 
-    return {
-    ...r,
-    name: locData.name,
-    permalink: r.ref,
-    country_code: countryCode,
-    distance: distance,
-    lat: parseFloat(locData.lat), 
-    lng: parseFloat(locData.lng)  
-};
+        return {
+            ...r,
+            name: locData.name,
+            permalink: r.ref,
+            country_code: countryCode,
+            lat: parseFloat(locData.lat), 
+            lng: parseFloat(locData.lng),
+            isVisibleOnMap: true
+        };
     }).filter(r => r !== null);
 
-    if (mapCenter) {
-        processedResults.sort((a, b) => {
-            const distA = (a.distance === null || isNaN(a.distance)) ? Infinity : a.distance;
-            const distB = (b.distance === null || isNaN(b.distance)) ? Infinity : b.distance;
-            return distA - distB;
-        });
-    }
-    
-    if (processedResults.length === 0 && lunrRes.length > 0) {
+    if (processedResultsWithoutDistances.length === 0 && lunrRes.length > 0) {
          ul.innerHTML = "<li>No results with valid location data.</li>"; 
          markersLayer.clearLayers();
     }
@@ -378,6 +362,58 @@ function renderResults(lunrRes) {
     // Add markers for search results
     const bounds = L.latLngBounds();
 
+    // calculate the bounds
+    for (const r of processedResultsWithoutDistances) {
+        // Add marker to map
+        if (!isNaN(r.lat) && !isNaN(r.lng)) {
+            // Extend bounds to include this marker
+            bounds.extend([r.lat, r.lng]);
+        }
+    }    
+    // Only fit bounds on initial search, not when the map is manually moved
+    // this is mostly done by trapping manual moves via dragend, not moveend
+    // because us moving the map with fitbounds triggers moveend, not dragend
+    if ((!mapCenter || processedResultsWithoutDistances.length >= 1) && !gotHereByDragging) {
+        leafletMap.fitBounds(bounds, {
+            padding: [50, 50],
+            maxZoom: 13
+        });
+        mapCenter = leafletMap ? leafletMap.getCenter() : null;
+    } else if (gotHereByDragging) {
+        // if they dragged the map, we want to indicate in the search list which
+        // markers are still on the map!
+        const mapBounds = leafletMap.getBounds()
+        processedResultsWithoutDistances.forEach(r => {
+            r.isVisibleOnMap = mapBounds.contains([r.lat, r.lng]);
+        })
+    }
+
+    // now that we know where the map bounds have been set to,
+    // calculate distances from it to the centre of the map and
+    // update the distances from the centre of the map
+    const processedResults = [];
+    for (const r of processedResultsWithoutDistances) {
+        let distance = null;
+        if (mapCenter && r.lat !== undefined && r.lng !== undefined) {
+            if (!isNaN(r.lat) && !isNaN(r.lng)) {
+                 distance = haversineDistance(mapCenter.lat, mapCenter.lng, r.lat, r.lng);
+            }
+        }
+        processedResults.push(Object.assign({distance}, r));
+    }    
+
+    if (mapCenter) {
+        processedResults.sort((a, b) => {
+            if (a.isVisibleOnMap && !b.isVisibleOnMap) { return -1; }
+            if (!a.isVisibleOnMap && b.isVisibleOnMap) { return 1; }
+            const distA = (a.distance === null || isNaN(a.distance)) ? Infinity : a.distance;
+            const distB = (b.distance === null || isNaN(b.distance)) ? Infinity : b.distance;
+            return distA - distB;
+        });
+    }
+    
+    // Finally, actually render the results list, and add the markets to the map
+    let previousMarkerWasOnMap = true;
     for (const r of processedResults) {
         // Add to list
         const s = snippet.cloneNode(true);
@@ -389,6 +425,18 @@ function renderResults(lunrRes) {
         tempDiv.innerHTML = r.name;
         a.textContent = tempDiv.textContent; // This will contain decoded entities
 
+        if (r.lat && r.lng) {
+            const marker = L.marker([r.lat, r.lng])
+                .bindPopup(`<a href="../${r.permalink}">${tempDiv.textContent}</a>`)
+                .addTo(markersLayer);
+            a.onmouseenter = () => {
+                marker._icon.classList.add("highlight");
+            }
+            a.onmouseleave = () => {
+                marker._icon.classList.remove("highlight");
+            }
+        }
+
         const i = s.querySelector("i");
         i.textContent = COUNTRIES[r.country_code] || r.country_code;
         
@@ -398,29 +446,15 @@ function renderResults(lunrRes) {
         } else if (distSpan) {
             distSpan.textContent = ""; 
         }
+        if (previousMarkerWasOnMap && !r.isVisibleOnMap) {
+            const li = document.createElement("li");
+            li.append(" ↓ not on the map ↓ ");
+            li.className = "offMapDivider";
+            ul.append(li);
+        }
+        previousMarkerWasOnMap = r.isVisibleOnMap;
         ul.append(s);
-        
-        // Add marker to map
-        if (!isNaN(r.lat) && !isNaN(r.lng)) {
-            const marker = L.marker([r.lat, r.lng])
-                .bindPopup(`<a href="../${r.permalink}">${tempDiv.textContent}</a>`)
-                .addTo(markersLayer);
-                
-            // Extend bounds to include this marker
-            bounds.extend([r.lat, r.lng]);
-        }
-    }
-    
-    // If we have results with locations, fit the map to show all markers
-    if (markersLayer.getLayers().length > 0) {
-        // Only fit bounds on initial search, not when the map is manually moved
-        if (!mapCenter || processedResults.length === 1) {
-            leafletMap.fitBounds(bounds, {
-                padding: [50, 50],
-                maxZoom: 13
-            });
-        }
-    }
+    }    
 }
 
 function searchFor(q) {
@@ -485,9 +519,9 @@ document.addEventListener('DOMContentLoaded', () => {
         alert('Could not get your location: ' + e.message);
     });
 
-    leafletMap.on('moveend', () => {
+    leafletMap.on('dragend', (e) => {
         if (lastQueryResults && lastQueryResults.length > 0) {
-            renderResults(lastQueryResults); // Re-sort and re-display with new map center
+            renderResults(lastQueryResults, true); // Re-sort and re-display with new map center
         }
     });
 

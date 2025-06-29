@@ -738,3 +738,17 @@ main#content:has(> article) {
   contain: layout style;
   pointer-events: none;  /* Make sure clicks go through to the map underneath */
 }
+
+#results .offMapDivider {
+    list-style: none;
+    display: flex;
+    align-items: center;
+}
+#results .offMapDivider::before,#results .offMapDivider::after {
+    content: "";
+    flex: 1 1 auto;
+    height: 50%;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+    display: inline-block;
+}
+img.highlight { filter: hue-rotate(120deg); }
