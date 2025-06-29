@@ -8,5 +8,5 @@ location: Hinton Road, Lansdowne, West Cliff, Bournemouth, Bournemouth, Christch
 external_url: https://www.stpetersbournemouth.org.uk
 title: St. Peter's Church
 ---
-
+Final resting place of the author of "Frankenstein: or, The Modern Prometheus", Mary Shelly.
 
