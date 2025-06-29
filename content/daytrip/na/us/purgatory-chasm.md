@@ -4,6 +4,7 @@ date: '2001-01-30T04:37:00'
 lat: 42.129310
 lng: -71.713826
 location: 198 Purgatory Rd., Sutton, Worcester County, Massachusetts 01590, United States
+external_url: https://www.mass.gov/locations/purgatory-chasm-state-reservation
 title: Purgatory Chasm
 ---
 

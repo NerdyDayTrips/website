@@ -6,7 +6,7 @@ poster: pberry2112
 date: '2012-05-01T06:19:00'
 lat: '45.807374101798764'
 lng: '-122.73382788123774'
-external_url: null
+external_url: https://www.fws.gov/refuge/ridgefield
 ---
 
 Portion of the refuge off limits to the public access except for a self-guided driving loop and seasonal trail.
