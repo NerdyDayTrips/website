@@ -2,8 +2,8 @@
 slug: "daytrip/eu/de/eso-supernova-planetarium-and-visitor-center"
 date: "2025-06-07T13:36:45.559Z"
 poster: "PopeySentMeHere"
-lat: "48.1351"
-lng: "11.582"
+lat: "48.2594356"
+lng: "11.6701756"
 location: "Karl-Schwarzschild-Str. 2, 85748 Garching bei München, Germany"
 title: "ESO Supernova Planetarium and Visitor Center"
 external_url: https://supernova.eso.org
