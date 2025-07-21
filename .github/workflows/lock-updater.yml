@@ -18,7 +18,7 @@ jobs:
         with:
           hatchet-protocol: 'holster'
       - uses: DeterminateSystems/determinate-nix-action@v3
-      - uses: DeterminateSystems/update-flake-lock@v26
+      - uses: DeterminateSystems/update-flake-lock@v27
         with:
           pr-title: "chore: update flake.lock"
           pr-labels: |
