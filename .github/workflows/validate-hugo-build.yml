@@ -36,6 +36,11 @@ jobs:
           hugo-version: '0.147.2'
           extended: true
 
+      - name: Install Image processing tools
+        run: |
+          sudo apt update
+          sudo apt install -y perl-image-exiftool jpegoptim optipng pngcrush gifsicle cwebp
+
       # Cache Hugo modules
       - name: Cache Hugo modules
         uses: actions/cache@v4
@@ -71,6 +76,12 @@ jobs:
           fi
           
           hugo --minify --baseURL="${BASE_URL}"
+
+      - name: Optimize images
+        run: |
+          du -hs public/images
+          scripts/image_optimization
+          du -hs public/images
 
       # ALTERNATIVE APPROACH: Deploy with conflict resolution
       - name: Deploy to GitHub Pages with retry and conflict resolution
