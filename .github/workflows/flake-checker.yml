@@ -18,4 +18,4 @@ jobs:
         with:
           hatchet-protocol: 'holster'
       - uses: DeterminateSystems/determinate-nix-action@v3
-      - uses: DeterminateSystems/flake-checker-action@v11
+      - uses: DeterminateSystems/flake-checker-action@v12
