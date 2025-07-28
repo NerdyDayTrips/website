@@ -39,7 +39,7 @@ jobs:
       - name: Install Image processing tools
         run: |
           sudo apt update
-          sudo apt install -y perl-image-exiftool jpegoptim optipng pngcrush gifsicle cwebp
+          sudo apt install -y libimage-exiftool-perl jpegoptim optipng pngcrush gifsicle
 
       # Cache Hugo modules
       - name: Cache Hugo modules

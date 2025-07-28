@@ -60,7 +60,7 @@ optimize_webp() {
   cwebp -q 80 "$image" -o "$image" &
 }
 
-export -f optimize_webp
+# export -f optimize_webp
 
 # Main script execution
 main() {
@@ -93,12 +93,12 @@ main() {
     echo "Install gifsicle to optimize GIF images"
   fi
 
-  # Optimize WebP images
-  if hash cwebp 2>/dev/null; then
-    find public -type f -iregex ".*\.\(webp\)" -print0 | xargs -0 -n1 -P$NUM_PARALLEL_JOBS bash -c 'optimize_webp "$0"'
-  else
-    echo "Install cwebp to optimize WebP images"
-  fi
+#   # Optimize WebP images
+#   if hash cwebp 2>/dev/null; then
+#     find public -type f -iregex ".*\.\(webp\)" -print0 | xargs -0 -n1 -P$NUM_PARALLEL_JOBS bash -c 'optimize_webp "$0"'
+#   else
+#     echo "Install cwebp to optimize WebP images"
+#   fi
 
   # Wait for all background jobs to finish
   wait
