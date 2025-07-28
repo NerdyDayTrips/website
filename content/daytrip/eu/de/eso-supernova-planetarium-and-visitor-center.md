@@ -2,16 +2,16 @@
 slug: "daytrip/eu/de/eso-supernova-planetarium-and-visitor-center"
 date: "2025-06-07T13:36:45.559Z"
 poster: "PopeySentMeHere"
-lat: "48.1351"
-lng: "11.582"
+lat: "48.259477"
+lng: "11.670524"
 location: "Karl-Schwarzschild-Str. 2, 85748 Garching bei München, Germany"
 title: "ESO Supernova Planetarium and Visitor Center"
 external_url: https://supernova.eso.org
 ---
-Visiotor center at the ESO Headquarters. Exhibition about astronomy open to the public and free, Planetarium show often sold out weeks in advance.
+Visitor center at the ESO Headquarters. The astronomy exhibition is open to the public and free, and the Planetarium show often sells out weeks in advance.
 
-Closed Moday/Tuesday and in case of special events (you can also hold conferences at this venue).
+Closed on Mondays and Tuesdays, and in case of special events (conferences can also be held at this venue).
 
-A lot of information on the homepage, check details before you go.
+There is a lot of information on the homepage; please check the details before you proceed.
 
-The have a room called "The Void". Screaming not allowed.
+They have a room called "The Void". Screaming is not allowed.
