@@ -8,7 +8,7 @@ location: "Aldershot, Rushmoor, Hampshire, England, GU11 4AA, United Kingdom"
 title: "Aldershot Observatory"
 external_url: https://www.farnham-as.co.uk/aldershot-observatory/
 ---
-The [Aldershot Observatory](https://en.wikipedia.org/wiki/Aldershot_Observatory) can now be found in a house estate, although the land originally was part of the [Aldershot Garrison](https://en.wikipedia.org/wiki/Aldershot_Garrison).
+The [Aldershot Observatory](https://en.wikipedia.org/wiki/Aldershot_Observatory) can now be found in a housing estate, although the land originally was part of the [Aldershot Garrison](https://en.wikipedia.org/wiki/Aldershot_Garrison).
 
 References
 - https://www.getsurrey.co.uk/news/hampshire-news/alexander-observatory-queens-avenue-aldershot-16413479
