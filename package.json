@@ -1,0 +1,21 @@
+{
+  "name": "nerdydaytrips",
+  "version": "0.0.0",
+  "description": "nerdydaytrips",
+  "main": "no,js",
+  "scripts": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NerdyDayTrips/website.git"
+  },
+  "author": "popey",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/NerdyDayTrips/website/issues"
+  },
+  "homepage": "https://github.com/NerdyDayTrips/website#readme",
+  "devDependencies": {
+    "@playwright/test": "^1.53.1",
+    "@types/node": "^24.0.3"
+  }
+}
