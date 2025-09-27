@@ -41,7 +41,7 @@
     <link rel="stylesheet" href="{{ $css.Permalink | absURL }}">
 
     <title>{{ .Title }}</title>
-    {{ partial "opengraph.html" . }}
+    <!-- # issue 1645. Disable opengraph for now. -->
     <link rel="me" href="https://mastodon.social/@nerdydaytrips">
     <link rel="icon" type="image/png" href="{{ "/favicon-96x96.png" | relURL }}" sizes="96x96" />
     <link rel="icon" type="image/svg+xml" href="{{ "/favicon.svg" | relURL }}" />
