@@ -38,7 +38,7 @@ jobs:
 
       # Cache Hugo modules
       - name: Cache Hugo modules
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: ${{ env.HUGO_CACHEDIR }}
           key: ${{ runner.os }}-hugomod-${{ hashFiles('**/go.sum') }}
@@ -47,7 +47,7 @@ jobs:
 
       # Cache Hugo resources (where generated images are stored)
       - name: Cache Hugo resources
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: resources
           key: hugo-resources-v1-${{ hashFiles('config.*', 'themes/**', 'layouts/**') }}
