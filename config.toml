@@ -80,3 +80,6 @@ relativeURLs = true
     weight = 50
     [menu.main.params]
       icon = "fa-brands fa-github"
+
+[taxonomies]
+poster = "poster"
